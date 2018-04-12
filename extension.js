@@ -1,6 +1,14 @@
+
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
+
+var getExtensionFromPath = function(path) {
+    let a = path.split('/')
+    let fileName = a[a.length - 1]
+    let b = fileName.split('.')
+    return b[b.length - 1]
+}
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -13,6 +21,8 @@ function activate(context) {
     let disposable = vscode.commands.registerCommand('extension.consoleLogger', function () {
         // The console.log('', )code you place here will be executed every time your command is executed
         // Display a message box to the user
+       
+        
         var editor = vscode.window.activeTextEditor;
         if (!editor) {
             return; // No open text editor
@@ -21,7 +31,16 @@ function activate(context) {
         var selection = editor.selection;
         var text = editor.document.getText(selection);
 
-        var newText = "console.log('" + text + "', " + text + ")" 
+        var newText = "" 
+        var currentPath = editor.document.uri.path
+        var fileExtension = getExtensionFromPath(currentPath)
+
+        if (fileExtension === 'js') {
+            newText = "console.log('" + text + "', " + text + ")"
+        }
+        if (fileExtension === 'rb') {
+            newText = "puts '" + text + "', " + text
+        }
 
         // Display a message box to the user
            editor.edit(builder => {
@@ -36,4 +55,6 @@ exports.activate = activate;
 // this method is called when your extension is deactivated
 function deactivate() {
 }
+
+
 exports.deactivate = deactivate;
