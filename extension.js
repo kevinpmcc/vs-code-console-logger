@@ -10,6 +10,10 @@ var getExtensionFromPath = function(path) {
     return b[b.length - 1]
 }
 
+var formatForJSP = function(string) {
+    return "\"<c:out value=\"${" + string + "}\" />\""
+}
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
@@ -38,8 +42,13 @@ function activate(context) {
         if (fileExtension === 'js' || fileExtension === 'jsx') {
             newText = "console.log('" + text + "', " + text + ")"
         }
+
         if (fileExtension === 'rb') {
             newText = "puts '" + text + "', " + text
+        }
+
+        if (fileExtension === 'jsp' || fileExtension === 'jspf' || fileExtension === 'tag') {
+            newText = formatForJSP(text)
         }
 
         // Display a message box to the user
