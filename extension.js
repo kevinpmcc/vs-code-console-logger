@@ -39,7 +39,7 @@ function activate(context) {
         var currentPath = editor.document.uri.path
         var fileExtension = getExtensionFromPath(currentPath)
 
-        if (fileExtension === 'js' || fileExtension === 'jsx') {
+        if (fileExtension === 'js' || fileExtension === 'jsx' || fileExtension === 'vue') {
             newText = "console.log('" + text + "', " + text + ")"
         }
 
