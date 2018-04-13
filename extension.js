@@ -35,7 +35,7 @@ function activate(context) {
         var currentPath = editor.document.uri.path
         var fileExtension = getExtensionFromPath(currentPath)
 
-        if (fileExtension === 'js') {
+        if (fileExtension === 'js' || fileExtension === 'jsx') {
             newText = "console.log('" + text + "', " + text + ")"
         }
         if (fileExtension === 'rb') {
