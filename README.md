@@ -1,4 +1,4 @@
-# consolelogger README
+# Console Logger
 
 This is the README for the vs code extension "Console Logger". 
 
