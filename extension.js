@@ -3,18 +3,18 @@
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 
-var getExtensionFromPath = function(path) {
+const getExtensionFromPath = (path) => {
     let a = path.split('/')
     let fileName = a[a.length - 1]
     let b = fileName.split('.')
     return b[b.length - 1]
 }
 
-var formatForJSP = function(string) {
+const formatForJSP = (string) => {
     return "\"<c:out value=\"${" + string + "}\" />\""
 }
 
-var supportedFileExtensions = ['js', 'jsx', 'vue', 'rb', 'jsp', 'tag', 'jspf']
+const supportedFileExtensions = ['js', 'jsx', 'vue', 'rb', 'jsp', 'tag', 'jspf']
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
@@ -28,19 +28,19 @@ function activate(context) {
         // Display a message box to the user
        
         
-        var editor = vscode.window.activeTextEditor;
+        const editor = vscode.window.activeTextEditor;
         if (!editor) {
             return; // No open text editor
         }
-        var currentPath = editor.document.uri.path
-        var fileExtension = getExtensionFromPath(currentPath)
+        const currentPath = editor.document.uri.path
+        const fileExtension = getExtensionFromPath(currentPath)
 
         if (!supportedFileExtensions.includes(fileExtension)) return;
 
-        var selection = editor.selection;
-        var text = editor.document.getText(selection);
+        const selection = editor.selection;
+        const text = editor.document.getText(selection);
 
-        var newText = "" 
+        let newText = "" 
 
         if (fileExtension === 'js' || fileExtension === 'jsx' || fileExtension === 'vue') {
             newText = "console.log('" + text + "', " + text + ")"
