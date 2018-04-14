@@ -10,11 +10,27 @@ const getExtensionFromPath = (path) => {
     return b[b.length - 1]
 }
 
-const formatForJSP = (string) => {
-    return "\"<c:out value=\"${" + string + "}\" />\""
+const formatForJsp = (text) => {
+    return "\"<c:out value=\"${" + text + "}\" />\""
 }
 
-const supportedFileExtensions = ['js', 'jsx', 'vue', 'rb', 'jsp', 'tag', 'jspf']
+const formatForJs = (text) => {
+    return "console.log('" + text + "', " + text + ")"
+}
+
+const formatForRb = (text) => {
+    return "puts '" + text + "', " + text
+}
+
+const supportedFileExtensions = {
+    js: formatForJs,
+    jsx: formatForJs,
+    vue: formatForJs,
+    rb: formatForRb,
+    jsp: formatForJsp,
+    jspf: formatForJsp,
+    tag: formatForJsp
+}
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
@@ -35,27 +51,15 @@ function activate(context) {
         const currentPath = editor.document.uri.path
         const fileExtension = getExtensionFromPath(currentPath)
 
-        if (!supportedFileExtensions.includes(fileExtension)) return;
+        if (!supportedFileExtensions[fileExtension]) return;
 
         const selection = editor.selection;
         const text = editor.document.getText(selection);
 
-        let newText = "" 
-
-        if (fileExtension === 'js' || fileExtension === 'jsx' || fileExtension === 'vue') {
-            newText = "console.log('" + text + "', " + text + ")"
-        }
-
-        if (fileExtension === 'rb') {
-            newText = "puts '" + text + "', " + text
-        }
-
-        if (fileExtension === 'jsp' || fileExtension === 'jspf' || fileExtension === 'tag') {
-            newText = formatForJSP(text)
-        }
+        let newText = supportedFileExtensions[fileExtension](text)
 
         // Display a message box to the user
-           editor.edit(builder => {
+        editor.edit(builder => {
             builder.replace(selection, newText)
         })
     });
