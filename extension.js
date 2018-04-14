@@ -14,6 +14,7 @@ var formatForJSP = function(string) {
     return "\"<c:out value=\"${" + string + "}\" />\""
 }
 
+var supportedFileExtensions = ['js', 'jsx', 'vue', 'rb', 'jsp', 'tag', 'jspf']
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
@@ -31,13 +32,15 @@ function activate(context) {
         if (!editor) {
             return; // No open text editor
         }
+        var currentPath = editor.document.uri.path
+        var fileExtension = getExtensionFromPath(currentPath)
+
+        if (!supportedFileExtensions.includes(fileExtension)) return;
 
         var selection = editor.selection;
         var text = editor.document.getText(selection);
 
         var newText = "" 
-        var currentPath = editor.document.uri.path
-        var fileExtension = getExtensionFromPath(currentPath)
 
         if (fileExtension === 'js' || fileExtension === 'jsx' || fileExtension === 'vue') {
             newText = "console.log('" + text + "', " + text + ")"
